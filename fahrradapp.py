@@ -1,46 +1,94 @@
+from kivy.app import App
+from kivy.base import runTouchApp
+from kivy.lang import Builder
+from kivy.properties import ListProperty
+from kivy.uix.boxlayout import BoxLayout
+
+from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
+
 from kivy.core.window import Window
 
 Window.size = (800, 480)
 Window.borderless = True
 
-from kivy.uix.boxlayout import BoxLayout
-from kivy.app import App
-from kivy.uix.label import Label
+import time
+import random
+import kwad
 
-from kivy.graphics import Rectangle, Color
-from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.uix.behaviors import ButtonBehavior
+from kivy.uix.image import Image
 
-class mainMenu(Screen):
+class ImageButton(ButtonBehavior, Image):
     pass
 
-class trainingMenu(Screen):
+class MainScreen(Screen):
     pass
 
-class FahrradApp(App):
+class SportScreen(Screen):
+    pass
 
+class SettingScreen(Screen):
+    pass
+
+class MyScreenManager(ScreenManager):
+    kwad.attach()
+
+root_widget = Builder.load_string('''
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+MyScreenManager:
+    transition: FadeTransition()
+    MainScreen:
+    SportScreen:
+    SettingScreen:
+
+<MainScreen>:
+    name: 'main'
+    BoxLayout:
+        orientation: 'horizontal'
+        padding: 100
+        ImageButton:
+            source: 'fahrrad.png'
+            allow_stretch: False
+            keep_ratio: True
+            on_press: app.root.current = 'sport'
+            a: self.show_area('r')
+        ImageButton:
+            source: 'tech_einstellungen.png'
+            allow_stretch: False
+            keep_ratio: True
+            on_press: app.root.current = 'setting'
+            a: self.show_area('b')
+
+<SportScreen>:
+    name: 'sport'
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Action'
+            font_size: 30
+        ImageButton:
+            source: 'close_ph.png'
+            allow_stretch: False
+            keep_ratio: True
+            on_press: app.root.current = 'main'
+
+<SettingScreen>:
+    name: 'setting'
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Einstellungen'
+            font_size: 30
+        ImageButton:
+            source: 'close_ph.png'
+            allow_stretch: False
+            keep_ratio: True
+            on_press: app.root.current = 'main'
+
+''')
+
+class ScreenManagerApp(App):
     def build(self):
-        #Grundlayout fuer Hauptbildschirm
+        return root_widget
 
-        #Header
-        header = BoxLayout(size_hint=(1,None), height=50)
-        header.add_widget(Label(text="Platzhalter oben", id="oben"))
-
-        infobar = BoxLayout(size_hint=(None,1), width=100)
-        infobar.add_widget(Label(text="Info"))
-
-        mitte = BoxLayout()
-        mitte.add_widget(Label(text="Hier Widget"))
-        mitte.add_widget(infobar)
-
-        footer = BoxLayout(size_hint=(1,None), height=50)
-        footer.add_widget(Label(text="Platzhalter unten"))
-
-        #Container fuer alle einzelnen Teile, Header, Footer, Mitte mit Seite
-        root = BoxLayout(orientation='vertical')
-        root.add_widget(header)
-        root.add_widget(mitte)
-        root.add_widget(footer)
-
-        return root
-
-FahrradApp().run()
+ScreenManagerApp().run()
