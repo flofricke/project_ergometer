@@ -18,6 +18,8 @@ import kwad
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.image import Image
 
+#class
+
 class ImageButton(ButtonBehavior, Image):
     pass
 
@@ -51,13 +53,11 @@ MyScreenManager:
             allow_stretch: False
             keep_ratio: True
             on_press: app.root.current = 'sport'
-            a: self.show_area('r')
         ImageButton:
             source: 'tech_einstellungen.png'
             allow_stretch: False
             keep_ratio: True
             on_press: app.root.current = 'setting'
-            a: self.show_area('b')
 
 <SportScreen>:
     name: 'sport'
@@ -71,6 +71,7 @@ MyScreenManager:
             allow_stretch: False
             keep_ratio: True
             on_press: app.root.current = 'main'
+            a: self.show_area('r')
 
 <SettingScreen>:
     name: 'setting'
